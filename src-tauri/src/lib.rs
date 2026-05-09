@@ -22,6 +22,7 @@ pub fn run() {
             commands::record_skill_execution,
             commands::get_hook_script_path,
             commands::get_settings_path,
+            commands::get_skills_in_path,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

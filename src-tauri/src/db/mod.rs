@@ -78,6 +78,7 @@ impl Database {
         let conn = Connection::open(&db_path)?;
         let db = Database { conn };
         db.init_tables()?;
+        db.init_default_paths()?; // 初始化默认路径
         Ok(db)
     }
 
@@ -252,6 +253,17 @@ impl Database {
         self.conn.execute(
             "UPDATE skill_paths SET enabled = ?1 WHERE path = ?2",
             params![enabled, path],
+        )?;
+        Ok(())
+    }
+
+    pub fn init_default_paths(&self) -> DbResult<()> {
+        let home = dirs::home_dir().unwrap_or_default();
+        let user_path = home.join(".claude").join("skills");
+
+        self.conn.execute(
+            "INSERT OR IGNORE INTO skill_paths (path, path_type, enabled) VALUES (?1, 'user', TRUE)",
+            params![user_path.to_string_lossy().to_string()],
         )?;
         Ok(())
     }

@@ -99,3 +99,21 @@ pub fn get_settings_path() -> Result<String, String> {
     let home = std::env::var("HOME").map_err(|e| e.to_string())?;
     Ok(format!("{}/.claude/settings.json", home))
 }
+
+#[tauri::command]
+pub fn get_skills_in_path(path: String) -> Result<Vec<String>, String> {
+    let mut skills = Vec::new();
+    let path = shellexpand::full(&path)
+        .map_err(|e| e.to_string())?
+        .into_owned();
+
+    if let Ok(entries) = std::fs::read_dir(&path) {
+        for entry in entries.flatten() {
+            let entry_path = entry.path();
+            if entry_path.is_dir() && !entry_path.file_name().unwrap().to_string_lossy().starts_with('.') {
+                skills.push(entry_path.file_name().unwrap().to_string_lossy().to_string());
+            }
+        }
+    }
+    Ok(skills)
+}

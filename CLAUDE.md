@@ -234,6 +234,61 @@ CREATE TABLE skill_definitions (
 - Vue 组件使用 Composition API + `<script setup>`
 - Claude Code Hooks 脚本使用 Shell + Python
 
+## 前端开发规范
+
+### UI 设计规范
+
+| 项目 | 规范值 |
+|------|--------|
+| **主色** | `#3b82f6`（低饱和蓝） |
+| **侧边栏背景** | `#1e293b`（灰蓝色） |
+| **侧边栏选中态** | `rgba(96, 165, 250, 0.12)` + 文字 `#60a5fa` |
+| **中性色** | 背景 `#f8fafc`、卡片 `#ffffff`、文字 `#1e293b`/`#64748b` |
+| **圆角** | 卡片 8px、按钮/输入框 6px、标签 999px |
+| **间距** | 卡片间距 24px、卡片内边距 24px、元素间距 8-12px |
+| **字号** | 标题 18px、卡片标题 15px、正文 14px、辅助文字 12-13px |
+
+### 图标使用规范
+
+- **优先使用 Ant Design Icons**：`@ant-design/icons-vue`
+- 不使用 `lucide-vue-next`（SVG 图标会导致尺寸不居中问题）
+- 图标样式：`font-size: 18px; flex-shrink: 0; min-width: 18px;`
+
+### 侧边栏组件结构
+
+```vue
+<div class="sider-menu-item">
+  <router-link :to="path" class="sider-menu-link">
+    <component :is="icon" class="sider-menu-icon" />
+    <span class="sider-menu-label">菜单文字</span>
+  </router-link>
+</div>
+```
+
+- 外层 `sider-menu-item`：控制 hover/active 背景
+- 内层 `sider-menu-link`：flex 布局，`align-items: center`
+- 收起状态：`justify-content: center; padding: 10px 0;`
+
+### 页面布局（B 端中后台）
+
+- 侧边栏 + 主内容区 + 可选右侧边栏
+- 统一卡片样式：白色背景、圆角 8px、轻微阴影 `0 1px 3px rgba(0,0,0,0.05)`
+- 表单输入框：高度 36px、圆角 6px、边框 `#e2e8f0`
+- 按钮：高度 36px、圆角 6px，主色 `#3b82f6`
+
+### Pill 标签样式
+
+```css
+.tag-ai {
+  background: #eff6ff;
+  color: #3b82f6;
+}
+.tag-manual {
+  background: #f0fdf4;
+  color: #16a34a;
+}
+```
+
 ## Hook 脚本实现示例
 
 ```python

@@ -2,6 +2,8 @@ import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { skillApi, type SkillExecution, type SkillPath, type SkillStats } from '@/api/skill'
 
+const REFRESH_INTERVAL = 5000 // 5秒刷新一次
+
 export const useSkillStore = defineStore('skill', () => {
   // State
   const executions = ref<SkillExecution[]>([])
@@ -9,6 +11,7 @@ export const useSkillStore = defineStore('skill', () => {
   const paths = ref<SkillPath[]>([])
   const loading = ref(false)
   const error = ref<string | null>(null)
+  let refreshTimer: number | null = null
 
   // Getters
   const userPaths = computed(() => paths.value.filter(p => p.path_type === 'user'))
@@ -112,6 +115,21 @@ export const useSkillStore = defineStore('skill', () => {
     await Promise.all([fetchExecutions(), fetchStats(), fetchPaths()])
   }
 
+  function startAutoRefresh() {
+    if (refreshTimer) return
+    fetchAll() // 立即执行一次
+    refreshTimer = window.setInterval(() => {
+      fetchAll()
+    }, REFRESH_INTERVAL)
+  }
+
+  function stopAutoRefresh() {
+    if (refreshTimer) {
+      clearInterval(refreshTimer)
+      refreshTimer = null
+    }
+  }
+
   return {
     // State
     executions,
@@ -130,6 +148,8 @@ export const useSkillStore = defineStore('skill', () => {
     addPath,
     removePath,
     togglePath,
-    fetchAll
+    fetchAll,
+    startAutoRefresh,
+    stopAutoRefresh
   }
 })

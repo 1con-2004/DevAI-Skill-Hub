@@ -84,5 +84,10 @@ export const skillApi = {
   // 获取 Claude Code settings.json 路径
   getSettingsPath(): Promise<string> {
     return invoke('get_settings_path')
+  },
+
+  // 获取某个路径下的 Skill 列表
+  getSkillsInPath(path: string): Promise<string[]> {
+    return invoke('get_skills_in_path', { path })
   }
 }

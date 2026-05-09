@@ -142,7 +142,8 @@ function formatTime(timestamp: string) {
     if (tz === 'local') {
       return dayjs(timestamp).format('YYYY-MM-DD HH:mm:ss')
     }
-    return dayjs(timestamp).tz(tz).format('YYYY-MM-DD HH:mm:ss')
+    // 将时间戳解析为 UTC，然后转换到目标时区
+    return dayjs.utc(timestamp).tz(tz).format('YYYY-MM-DD HH:mm:ss')
   } catch {
     return dayjs(timestamp).format('YYYY-MM-DD HH:mm:ss')
   }

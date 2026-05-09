@@ -164,10 +164,11 @@ let timeInterval: number | null = null
 
 function updateCurrentTime() {
   try {
+    const now = dayjs.utc()
     if (selectedTimezone.value === 'local') {
-      currentTime.value = dayjs().format('YYYY-MM-DD HH:mm:ss')
+      currentTime.value = now.local().format('YYYY-MM-DD HH:mm:ss')
     } else {
-      currentTime.value = dayjs().tz(selectedTimezone.value).format('YYYY-MM-DD HH:mm:ss')
+      currentTime.value = now.tz(selectedTimezone.value).format('YYYY-MM-DD HH:mm:ss')
     }
   } catch {
     currentTime.value = dayjs().format('YYYY-MM-DD HH:mm:ss')
